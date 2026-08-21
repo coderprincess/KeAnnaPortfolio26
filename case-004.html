@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Configuration & Vulnerability Assessment — Ke'Anna McKinney</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-mark"><span class="dot"></span>KM // DFIR</div>
+  <nav class="links">
+    <a href="index.html#cases">Case Files</a>
+    <a href="index.html#think">How I Think</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>
+  <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">Menu</button>
+</header>
+
+<div class="wrap">
+  <div class="breadcrumb reveal">
+    <a href="index.html">Portfolio</a><span class="sep">/</span><a href="index.html#cases">Case Files</a><span class="sep">/</span><span class="current">Case 004</span>
+  </div>
+
+  <div class="case-page-hero reveal">
+    <div class="feat-eyebrow">Case 004 · Closed</div>
+    <h1 class="feat-title">Security Configuration & Vulnerability Assessment</h1>
+    <div class="feat-meta">Security Configuration<br>Vulnerability Assessment<br>Remediation</div>
+    <div class="case-tags"><span>Nmap</span><span>Metasploit</span><span>vsFTPd</span><span>xinetd</span></div>
+  </div>
+
+  <div class="case-body">
+    <div class="feat-cols reveal">
+      <div class="feat-block">
+        <h4>The Incident</h4>
+        <p>A dual-homed Kali analyst VM was set up against an isolated Metasploitable target on a VirtualBox host-only network. A default Nmap scan against the target returned 23 open TCP services — a large attack surface that needed to be triaged, validated, and reduced rather than just listed.</p>
+        <h4>The Mission</h4>
+        <p>Enumerate and prioritize the exposed attack surface, validate the highest-severity findings through actual exploitation rather than assuming severity from a CVE label alone, then remediate and verify the fix.</p>
+        <h4>Before I Started</h4>
+        <p>Which of these 23 open services are genuinely dangerous versus just old? Can I prove exploitability, not just flag a CVE? And what's actually safe to disable without locking myself out of the box?</p>
+      </div>
+      <div class="feat-block">
+        <h4>Finding — Investigator's Reasoning</h4>
+        <p>A version-banner scan alone would have flagged the outdated FTP service as one entry among many legacy services. Running the actual exploit against it — and landing a root shell with uid=0(root) — is what separated it from every other 'outdated software' finding on the host, and that distinction is what justified prioritizing it first in remediation.</p>
+      </div>
+    </div>
+
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:12px;" class="reveal">Investigation Timeline</h4>
+    <div class="timeline reveal">
+      <div class="tl-row"><span class="tl-time">17:05</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Initial recon</b> — default Nmap scan against 192.168.56.102 identifies 23 open TCP ports.</span></div>
+      <div class="tl-row"><span class="tl-time">17:13</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Service/version scan</b> — nmap -sV fingerprints vsFTPd 2.3.4, OpenSSH 4.7p1, Apache 2.2.8, and several other legacy services.</span></div>
+      <div class="tl-row"><span class="tl-time">17:23</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Vulnerability scripts run</b> — nmap --script vuln confirms the vsFTPd 2.3.4 backdoor (CVE-2011-2523) plus weak/legacy TLS findings (POODLE, Logjam).</span></div>
+      <div class="tl-row"><span class="tl-time">18:33</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Exploitability confirmed</b> — targeted ftp-vsftpd-backdoor script executes id through the backdoor, returning uid=0(root).</span></div>
+      <div class="tl-row"><span class="tl-time">18:44</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Exploitation</b> — Metasploit's exploit/unix/ftp/vsftpd_234_backdoor launched against the target; interactive root shell obtained.</span></div>
+      <div class="tl-row"><span class="tl-time">19:05</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Baseline documented</b> — pre-remediation re-scan run to record the starting state before any changes.</span></div>
+      <div class="tl-row"><span class="tl-time">Remediation</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Four services disabled</b> via xinetd — Telnet (23), the exposed root shell (1524), UnrealIRCd (6667), and vsFTPd (21) — while SSH (22) was intentionally left untouched.</span></div>
+      <div class="tl-row"><span class="tl-time">Verification</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Re-scan confirms closure</b> — port 21 no longer listening and CVE-2011-2523 no longer detectable.</span></div>
+    </div>
+
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:36px;" class="reveal">Key Vulnerability Findings</h4>
+    <table class="ioc-table reveal">
+    <tr><th>Type</th><th>Indicator</th><th>Context</th></tr>
+    <tr><td>CVE-2011-2523</td><td>vsFTPd 2.3.4 backdoor</td><td>Port 21 — exploited via Metasploit for uid=0(root) shell</td></tr>
+    <tr><td>Finding</td><td>Exposed root shell</td><td>Port 1524 — unauthenticated Metasploitable bindshell</td></tr>
+    <tr><td>Finding</td><td>UnrealIRCd backdoor</td><td>Port 6667 — trojaned IRC service version</td></tr>
+    <tr><td>Finding</td><td>Java RMI RCE</td><td>Port 1099 — default config allows remote class loading</td></tr>
+    <tr><td>Finding</td><td>Weak/legacy TLS</td><td>Ports 25, 5432 — POODLE, Logjam, anonymous DH</td></tr>
+    </table>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gray);margin-top:14px;">Conducted entirely in an isolated VirtualBox lab environment (Kali analyst VM + Metasploitable2 target) — not against production infrastructure.</p>
+    
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:36px;" class="reveal">Case Evidence</h4>
+    <div class="shot-row">
+    <div class="shot reveal">
+      <img src="assets/case-004/nmap-initial-recon.jpg" alt="Kali terminal showing initial network interface reconnaissance" loading="lazy">
+      <div class="shot-caption"><b>Initial recon</b> &mdash; confirming the Kali analyst VM's dual-homed network setup before scanning the target.</div>
+    </div>
+    <div class="shot reveal">
+      <img src="assets/case-004/nmap-service-version-scan.jpg" alt="Full nmap -sV service and version detection scan output listing 23 open ports" loading="lazy">
+      <div class="shot-caption"><b>Service/version scan</b> &mdash; <code>nmap -sV</code> fingerprinting all 23 open ports, including vsFTPd 2.3.4 and several other legacy services.</div>
+    </div>
+    </div>
+    <div class="shot reveal">
+      <img src="assets/case-004/vsftpd-backdoor-confirmed.jpg" alt="Nmap vulnerability script confirming the vsFTPd 2.3.4 backdoor as exploitable with root shell access" loading="lazy">
+      <div class="shot-caption"><b>Vulnerability confirmed</b> &mdash; the targeted <code>ftp-vsftpd-backdoor</code> script proving CVE-2011-2523 is exploitable, with the backdoor shell returning <code>uid=0(root)</code>.</div>
+    </div>
+    <div class="shot-row">
+    <div class="shot reveal">
+      <img src="assets/case-004/metasploit-module-setup.jpg" alt="Metasploit console configuring the vsftpd_234_backdoor exploit module with RHOSTS set" loading="lazy">
+      <div class="shot-caption"><b>Exploit staged</b> &mdash; Metasploit's <code>exploit/unix/ftp/vsftpd_234_backdoor</code> module configured against the target.</div>
+    </div>
+    <div class="shot reveal">
+      <img src="assets/case-004/root-shell-obtained.jpg" alt="Post-exploitation root shell showing filesystem listing and system banner" loading="lazy">
+      <div class="shot-caption"><b>Root shell obtained</b> &mdash; interactive access after the exploit lands, confirming the CVE wasn't theoretical.</div>
+    </div>
+    </div>
+    <div class="shot-row">
+    <div class="shot reveal">
+      <img src="assets/case-004/root-shell-enumeration.jpg" alt="Root shell enumeration showing /etc/passwd contents and sudo -l output" loading="lazy">
+      <div class="shot-caption"><b>Post-exploitation enumeration</b> &mdash; <code>/etc/passwd</code> and <code>sudo -l</code> confirming full root-level access.</div>
+    </div>
+    <div class="shot reveal">
+      <img src="assets/case-004/remediation-xinetd-edit.jpg" alt="Editing the xinetd vsftpd service configuration to set disable=yes" loading="lazy">
+      <div class="shot-caption"><b>Remediation applied</b> &mdash; setting <code>disable = yes</code> in the xinetd service definition to close the vulnerable FTP service.</div>
+    </div>
+    </div>
+    <div class="shot reveal">
+      <img src="assets/case-004/before-after-rescan.jpg" alt="Before and after nmap re-scan showing port 21 changing from open to closed" loading="lazy">
+      <div class="shot-caption"><b>Fix verified</b> &mdash; the follow-up <code>nmap -sV -p 21</code> scan confirming port 21 moved from <code>open</code> to <code>closed</code> after remediation.</div>
+    </div>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gray);margin-top:14px;">Conducted entirely in an isolated VirtualBox lab (Kali analyst VM + Metasploitable2 target).</p>
+
+  </div>
+</div>
+
+<!-- HOW I THINK (per-case) -->
+<div class="wrap" style="padding:80px 0 0;">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-num">Method</span>
+      <h2 class="section-title">How I Thought<br>Through This One</h2>
+    </div>
+  </div>
+  <div class="reasoning-card reveal">
+    <div class="reasoning-grid">
+      <div>
+        <div class="r-label">Question I Asked</div>
+        <p class="r-text quote">"Which of 23 open ports actually deserves urgent remediation, versus just being old?"</p>
+      </div>
+      <div>
+        <div class="r-label">Evidence</div>
+        <p class="r-text">nmap -sV service/version banners, nmap --script vuln output, and the result of an actual exploitation attempt against the flagged vsFTPd service.</p>
+      </div>
+      <div class="r-divider"></div>
+      <div>
+        <div class="r-label">What I Initially Thought</div>
+        <p class="r-text">My first pass treated the vsFTPd version mismatch as one flagged item among many outdated services on the host — a note to fix eventually, not an emergency.</p>
+      </div>
+      <div>
+        <div class="r-label">What Changed My Mind</div>
+        <p class="r-text">Running the Metasploit module against it and getting a root shell (uid=0) is what separated it from every other 'outdated software' finding — CVE-2011-2523 wasn't theoretical here, it was demonstrated.</p>
+      </div>
+      <div class="r-divider"></div>
+      <div style="grid-column:1/-1;">
+        <div class="r-label">Conclusion</div>
+        <p class="r-text">A version banner and a validated exploit are not the same finding. Confirming exploitability is what let me rank remediation correctly instead of by CVE severity label alone.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLS USED -->
+<div class="wrap" style="padding:80px 0 40px;">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-num">Toolkit</span>
+      <h2 class="section-title">Tools Used<br>on This Case</h2>
+    </div>
+  </div>
+  <div class="tool-grid reveal"><span class="tool-pill">Kali Linux</span><span class="tool-pill">Nmap (NSE vuln scripts)</span><span class="tool-pill">Metasploit Framework</span><span class="tool-pill">Metasploitable2</span><span class="tool-pill">xinetd</span><span class="tool-pill">netstat</span></div>
+</div>
+
+<div class="wrap">
+  <div class="case-nav-footer reveal">
+    <a class="case-nav-link prev" href="case-003.html">
+      <span class="dir">← Previous Case</span>
+      <span class="title">Case 003 — HiTeK Forensics Challenge</span>
+    </a>
+    <a class="case-nav-link next" href="case-005.html">
+      <span class="dir">Next Case →</span>
+      <span class="title">Case 005 — Cybersecurity Risk Assessment</span>
+    </a>
+  </div>
+  <a class="back-index" href="index.html#cases">← Back to all case files</a>
+</div>
+
+<!-- CONTACT / FOOTER -->
+<footer id="contact" class="wrap">
+  <div class="reveal">
+    <div class="feat-eyebrow" style="margin-bottom:18px;">Contact</div>
+    <div class="foot-cta">Open a<br><em>new case</em> with me.</div>
+  </div>
+  <div class="foot-grid reveal">
+    <div class="foot-col">
+      <div class="label">Reach Out</div>
+      <a href="mailto:hello@keannamckinney.com">hello@keannamckinney.com</a>
+      <a href="#">linkedin.com/in/keannamckinney</a>
+    </div>
+    <div class="foot-col">
+      <div class="label">Elsewhere</div>
+      <a href="#">GitHub</a>
+      <a href="#">Resume — PDF</a>
+    </div>
+    <div class="foot-col">
+      <div class="label">Based In</div>
+      <a href="#" style="pointer-events:none;">United States</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Ke'Anna McKinney</span>
+    <span>Case File Closed — Portfolio Open</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>

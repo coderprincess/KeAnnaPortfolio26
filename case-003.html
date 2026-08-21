@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HiTeK Black T-Shirt Cyber Forensics Challenge — Ke'Anna McKinney</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-mark"><span class="dot"></span>KM // DFIR</div>
+  <nav class="links">
+    <a href="index.html#cases">Case Files</a>
+    <a href="index.html#think">How I Think</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>
+  <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">Menu</button>
+</header>
+
+<div class="wrap">
+  <div class="breadcrumb reveal">
+    <a href="index.html">Portfolio</a><span class="sep">/</span><a href="index.html#cases">Case Files</a><span class="sep">/</span><span class="current">Case 003</span>
+  </div>
+
+  <div class="case-page-hero reveal">
+    <div class="feat-eyebrow">Case 003 · Closed</div>
+    <h1 class="feat-title">HiTeK Black T-Shirt Cyber Forensics Challenge</h1>
+    <div class="feat-meta">Digital Forensics<br>Team Investigation<br>Disk & Network Forensics</div>
+    <div class="case-tags"><span>Disk Forensics</span><span>Autopsy</span><span>Wireshark</span><span>Impacket</span></div>
+  </div>
+
+  <div class="case-body">
+    <div class="feat-cols reveal">
+      <div class="feat-block">
+        <h4>The Incident</h4>
+        <p>A Windows workstation image, a Linux server image, and a network capture were provided as part of a team forensics challenge simulating a data-exfiltration incident. Several user accounts existed on both systems, and nothing was pre-labeled — the responsible party and the exfiltration path both had to be reconstructed from artifacts alone.</p>
+        <h4>The Mission</h4>
+        <p>Work with a small investigative team to identify which account was actually responsible, recover any deleted or hidden evidence, and reconstruct the full file-transfer chain from source workstation to external retrieval.</p>
+        <h4>Before I Started</h4>
+        <p>Whose account is actually responsible, given that several accounts show activity on both systems? Were the missing ZIP files really gone, or just hidden? Did the files actually leave the network, and who retrieved them?</p>
+      </div>
+      <div class="feat-block">
+        <h4>Finding — Investigator's Reasoning</h4>
+        <p>Multiple accounts — webmaster, cknight, jhathoway on the Linux server; carson, tester, Jonathan on the Windows workstation — all had some footprint, so it wasn't obvious at first which one mattered. What resolved it was the FTP credentials captured in the packet capture: the login matched exactly what webmaster had configured on the server the night before, and Carson's Windows account was the only one active during the exact window the uploads occurred — placing one person at both ends of the transfer.</p>
+      </div>
+    </div>
+
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:12px;" class="reveal">Investigation Timeline</h4>
+    <div class="timeline reveal">
+      <div class="tl-row"><span class="tl-time">23:13</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Server setup begins</b> — webmaster logs into the Ubuntu system (web-srv-02).</span></div>
+      <div class="tl-row"><span class="tl-time">23:15</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Accounts created</b> — webmaster creates the cknight and jhathoway user accounts.</span></div>
+      <div class="tl-row"><span class="tl-time">23:17–23:24</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Services installed</b> — Apache2, vsftpd, and MySQL installed and configured on the server.</span></div>
+      <div class="tl-row"><span class="tl-time">23:37</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Misconfiguration introduced</b> — /var/www set to world-writable (chmod 777).</span></div>
+      <div class="tl-row"><span class="tl-time">Next day, 15:46</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>First upload</b> — BusinessStrategy.zip transferred via FTP from the Windows workstation to the Linux server.</span></div>
+      <div class="tl-row"><span class="tl-time">15:52</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Second upload</b> — secrets.zip transferred via FTP; both files land in /var/www/.</span></div>
+      <div class="tl-row"><span class="tl-time">After 15:52</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>External retrieval</b> — a third host pulls both files over HTTP; ZIP files then deleted from both source machines to cover tracks.</span></div>
+      <div class="tl-row"><span class="tl-time">17:52</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Server shutdown</b> — Ubuntu system logging stops.</span></div>
+    </div>
+
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:36px;" class="reveal">Key Accounts & Artifacts</h4>
+    <table class="ioc-table reveal">
+    <tr><th>Type</th><th>Indicator</th><th>Context</th></tr>
+    <tr><td>User</td><td>carson (Windows)</td><td>Primary suspect — password cracked via SAM hive + Impacket + CrackStation</td></tr>
+    <tr><td>User</td><td>webmaster (Linux)</td><td>FTP credentials used for both uploads</td></tr>
+    <tr><td>Host</td><td>Source workstation</td><td>Windows host where the ZIP files were created and later deleted</td></tr>
+    <tr><td>Host</td><td>Receiving server</td><td>Linux host configured as both FTP and web server (chmod 777)</td></tr>
+    <tr><td>File</td><td>secrets.zip / BusinessStrategy.zip</td><td>Password-protected; recovered from deleted/unallocated space</td></tr>
+    </table>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gray);margin-top:14px;">Hostnames and IPs generalized here; full identifiers are documented in the team's final report.</p>
+    
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:36px;" class="reveal">Case Evidence</h4>
+    <div class="shot reveal">
+      <img src="assets/case-003/hitek-relationship-map.jpg" alt="Relationship map diagramming users, systems, data flow, and the exfiltration timeline" loading="lazy">
+      <div class="shot-caption"><b>Case relationship map</b> &mdash; the team's visual reconstruction of every user, system, and file movement in the exfiltration chain, built to walk a reviewer through the full incident at a glance.</div>
+    </div>
+    <div class="shot-row">
+    <div class="shot reveal">
+      <img src="assets/case-003/wireshark-ftp-stream.jpg" alt="Wireshark Follow TCP Stream showing the FTP login and file listing" loading="lazy">
+      <div class="shot-caption"><b>Captured FTP credentials</b> &mdash; the Wireshark TCP stream showing <code>USER webmaster</code> / <code>PASS password</code>, the login later matched against the server's own configuration.</div>
+    </div>
+    <div class="shot reveal">
+      <img src="assets/case-003/impacket-secretsdump-hashes.jpg" alt="Impacket secretsdump output showing recovered NT hashes from the Windows SAM hive" loading="lazy">
+      <div class="shot-caption"><b>SAM hive extraction</b> &mdash; Impacket's <code>secretsdump.py</code> pulling NT hashes for each Windows account from the recovered SAM/SYSTEM hives.</div>
+    </div>
+    </div>
+    <div class="shot-row">
+    <div class="shot reveal">
+      <img src="assets/case-003/crackstation-password-crack.jpg" alt="CrackStation successfully cracking an NTLM hash to reveal the plaintext password" loading="lazy">
+      <div class="shot-caption"><b>Hash cracked</b> &mdash; CrackStation resolving a recovered NTLM hash back to its plaintext password, corroborating the password-hint evidence found on disk.</div>
+    </div>
+    <div class="shot reveal">
+      <img src="assets/case-003/autopsy-log-listing.jpg" alt="Autopsy file listing showing system log files with modification timestamps" loading="lazy">
+      <div class="shot-caption"><b>Log artifact review</b> &mdash; Autopsy's file listing for the server's log directory, used to correlate file timestamps against the reconstructed timeline.</div>
+    </div>
+    </div>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gray);margin-top:14px;">Screenshots pulled directly from the team's final report; VM/browser chrome cropped where it showed unrelated tabs.</p>
+
+  </div>
+</div>
+
+<!-- HOW I THINK (per-case) -->
+<div class="wrap" style="padding:80px 0 0;">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-num">Method</span>
+      <h2 class="section-title">How I Thought<br>Through This One</h2>
+    </div>
+  </div>
+  <div class="reasoning-card reveal">
+    <div class="reasoning-grid">
+      <div>
+        <div class="r-label">Question I Asked</div>
+        <p class="r-text quote">"Which account is actually responsible, when several accounts show activity across two systems?"</p>
+      </div>
+      <div>
+        <div class="r-label">Evidence</div>
+        <p class="r-text">Bash history and auth.log on the Linux server, the recovered Windows SAM hive, the FTP credentials captured inside the packet capture's TCP stream, and the carved contents of the deleted ZIP files.</p>
+      </div>
+      <div class="r-divider"></div>
+      <div>
+        <div class="r-label">What I Initially Thought</div>
+        <p class="r-text">With six-plus accounts showing some activity across both machines, it wasn't obvious at first which one was central to the exfiltration rather than just incidental noise.</p>
+      </div>
+      <div>
+        <div class="r-label">What Changed My Mind</div>
+        <p class="r-text">The packet capture's captured FTP login matched exactly the credentials configured on the server, and cross-referencing timestamps showed the same Windows account was active during both the file creation and the upload window — narrowing six possible accounts to one.</p>
+      </div>
+      <div class="r-divider"></div>
+      <div style="grid-column:1/-1;">
+        <div class="r-label">Conclusion</div>
+        <p class="r-text">Cross-referencing account activity across both disk images and the network capture, instead of trusting any single artifact in isolation, is what turned a list of usernames into a defensible attribution.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLS USED -->
+<div class="wrap" style="padding:80px 0 40px;">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-num">Toolkit</span>
+      <h2 class="section-title">Tools Used<br>on This Case</h2>
+    </div>
+  </div>
+  <div class="tool-grid reveal"><span class="tool-pill">Autopsy</span><span class="tool-pill">Wireshark</span><span class="tool-pill">John the Ripper</span><span class="tool-pill">Impacket (secretsdump)</span><span class="tool-pill">CrackStation</span><span class="tool-pill">Registry Explorer</span></div>
+</div>
+
+<div class="wrap">
+  <div class="case-nav-footer reveal">
+    <a class="case-nav-link prev" href="case-002.html">
+      <span class="dir">← Previous Case</span>
+      <span class="title">Case 002 — Phishing Investigation</span>
+    </a>
+    <a class="case-nav-link next" href="case-004.html">
+      <span class="dir">Next Case →</span>
+      <span class="title">Case 004 — Security Configuration & Vulnerability Assessment</span>
+    </a>
+  </div>
+  <a class="back-index" href="index.html#cases">← Back to all case files</a>
+</div>
+
+<!-- CONTACT / FOOTER -->
+<footer id="contact" class="wrap">
+  <div class="reveal">
+    <div class="feat-eyebrow" style="margin-bottom:18px;">Contact</div>
+    <div class="foot-cta">Open a<br><em>new case</em> with me.</div>
+  </div>
+  <div class="foot-grid reveal">
+    <div class="foot-col">
+      <div class="label">Reach Out</div>
+      <a href="mailto:hello@keannamckinney.com">hello@keannamckinney.com</a>
+      <a href="#">linkedin.com/in/keannamckinney</a>
+    </div>
+    <div class="foot-col">
+      <div class="label">Elsewhere</div>
+      <a href="#">GitHub</a>
+      <a href="#">Resume — PDF</a>
+    </div>
+    <div class="foot-col">
+      <div class="label">Based In</div>
+      <a href="#" style="pointer-events:none;">United States</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Ke'Anna McKinney</span>
+    <span>Case File Closed — Portfolio Open</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>

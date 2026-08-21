@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory Lab — Azure — Ke'Anna McKinney</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-mark"><span class="dot"></span>KM // DFIR</div>
+  <nav class="links">
+    <a href="index.html#cases">Case Files</a>
+    <a href="index.html#think">How I Think</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>
+  <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">Menu</button>
+</header>
+
+<div class="wrap">
+  <div class="breadcrumb reveal">
+    <a href="index.html">Portfolio</a><span class="sep">/</span><a href="index.html#cases">Case Files</a><span class="sep">/</span><span class="current">Case 007</span>
+  </div>
+
+  <div class="case-page-hero reveal">
+    <div class="feat-eyebrow">Case 007 · Closed</div>
+    <h1 class="feat-title">Active Directory Lab — Azure</h1>
+    <div class="feat-meta">Systems Administration<br>Active Directory<br>Microsoft Azure</div>
+    <div class="case-tags"><span>Active Directory</span><span>Azure</span><span>DNS</span><span>Windows Server 2022</span></div>
+  </div>
+
+  <div class="case-body">
+    <div class="feat-cols reveal">
+      <div class="feat-block">
+        <h4>The Objective</h4>
+        <p>Reproduce, in miniature, the infrastructure a small business or branch office IT environment would actually run: a Windows Server domain controller providing authentication, DNS, and DHCP, and a client workstation joined to that domain and managed through it &mdash; built end-to-end in Microsoft Azure rather than local VirtualBox VMs.</p>
+        <h4>The Mission</h4>
+        <p>Provision the domain controller VM, secure remote access without exposing any public ports, promote it to a domain controller, design an OU structure to reflect a multi-branch organization, populate it with users and groups, and successfully join a second VM to the domain.</p>
+        <h4>Before I Started</h4>
+        <p>How do you secure administrative access to a domain controller without exposing RDP to the internet? What actually has to be true before a client machine can join a domain? And what's the right way to structure OUs so permissions and policy scale cleanly across branches?</p>
+      </div>
+      <div class="feat-block">
+        <h4>Finding &mdash; Investigator's Reasoning</h4>
+        <p>The first domain-join attempt failed, which is the expected outcome when DNS isn't resolving correctly &mdash; but the dashboard alone didn't say why. Running <code>ipconfig /all</code> on the client showed it was still pointed at Azure's platform DNS service instead of the domain controller, so it could never locate the SRV records Active Directory needs to authenticate a join. That's what actually explained the failure below, not a permissions or credentials issue.</p>
+      </div>
+    </div>
+
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:12px;" class="reveal">Build Timeline</h4>
+    <div class="timeline reveal">
+      <div class="tl-row"><span class="tl-time">Part 1</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Domain controller provisioned</b> &mdash; Windows Server 2022 VM deployed with Trusted Launch (Secure Boot + vTPM), no public inbound ports, and a static private IP so downstream DNS/auth never breaks.</span></div>
+      <div class="tl-row"><span class="tl-time">Part 1</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Azure Bastion configured</b> for browser-based RDP over TLS &mdash; eliminating any need to expose port 3389 to the internet.</span></div>
+      <div class="tl-row"><span class="tl-time">Part 2</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Server roles installed</b> &mdash; AD DS, DNS, DHCP, Print and Document Services, and Web Server (IIS) added via Server Manager.</span></div>
+      <div class="tl-row"><span class="tl-time">Part 3</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Promoted to domain controller</b> &mdash; new forest and root domain (lab.local) created; server reboots and Active Directory Users and Computers becomes available.</span></div>
+      <div class="tl-row"><span class="tl-time">Part 4</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>OU structure designed</b> &mdash; Branch 1 and Branch 2 top-level OUs created, each with Users/Computers/Groups sub-OUs; users, a security group, and a cloned account provisioned.</span></div>
+      <div class="tl-row"><span class="tl-time">Part 5</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>First domain-join attempt fails</b> &mdash; client still pointed at Azure's default DNS instead of the domain controller.</span></div>
+      <div class="tl-row"><span class="tl-time">Part 5</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Root cause found</b> via <code>ipconfig /all</code>; DNS server on the client's NIC set explicitly to the domain controller's static IP (10.0.0.4).</span></div>
+      <div class="tl-row"><span class="tl-time">Part 5</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Domain join succeeds</b> &mdash; "Welcome to the lab.local domain"; connectivity verified by ping and by confirming the new computer object in Active Directory.</span></div>
+    </div>
+
+    <!-- SCREENSHOT GALLERY -->
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:36px;" class="reveal">Build Evidence</h4>
+
+    <div class="shot reveal">
+      <img src="assets/case-007/vm-basics-config.jpg" alt="Azure VM Basics configuration blade for the domain controller" loading="lazy">
+      <div class="shot-caption"><b>Domain controller VM provisioning</b> &mdash; Trusted Launch security type, Windows Server 2022 Datacenter (Azure Edition, Hotpatch), no public inbound ports.</div>
+    </div>
+
+    <div class="shot-row">
+      <div class="shot reveal">
+        <img src="assets/case-007/static-ip-config.jpg" alt="Editing the NIC IP configuration to switch from dynamic to static" loading="lazy">
+        <div class="shot-caption"><b>Static IP assignment</b> &mdash; private IP pinned to 10.0.0.4 so every client's DNS and auth settings stay valid.</div>
+      </div>
+      <div class="shot reveal">
+        <img src="assets/case-007/roles-dashboard-healthy.jpg" alt="Server Manager dashboard showing six healthy roles" loading="lazy">
+        <div class="shot-caption"><b>Roles installed and healthy</b> &mdash; AD DS, DHCP, DNS, File and Storage Services, IIS, and Print Services all green after the post-install reboot.</div>
+      </div>
+    </div>
+
+    <div class="shot reveal">
+      <img src="assets/case-007/dc-promotion-wizard.jpg" alt="Active Directory Domain Services Configuration Wizard, Domain Controller Options page" loading="lazy">
+      <div class="shot-caption"><b>Promotion to domain controller</b> &mdash; new forest configuration, setting the forest/domain functional level and DNS Server + Global Catalog capabilities.</div>
+    </div>
+
+    <div class="shot reveal">
+      <img src="assets/case-007/security-group-ou-tree.jpg" alt="Active Directory Users and Computers showing the Branch 1 OU tree and IT Workers security group" loading="lazy">
+      <div class="shot-caption"><b>OU structure and role-based access</b> &mdash; Branch 1 &rarr; Users/Computers/Groups, with the <code>IT Workers</code> security group created for group-based permission management.</div>
+    </div>
+
+    <div class="shot reveal">
+      <img src="assets/case-007/dns-root-cause-ipconfig.jpg" alt="ipconfig /all output confirming the client was using Azure's default DNS instead of the domain controller" loading="lazy">
+      <div class="shot-caption"><b>Root cause of the failed join</b> &mdash; <code>ipconfig /all</code> confirms the client was still resolving names against Azure's platform DNS (168.63.129.16), not the domain controller.</div>
+    </div>
+
+    <div class="shot-row">
+      <div class="shot reveal">
+        <img src="assets/case-007/domain-join-success.jpg" alt="Welcome to the lab.local domain confirmation dialog" loading="lazy">
+        <div class="shot-caption"><b>Join succeeds</b> after correcting the preferred DNS server to the domain controller's static IP.</div>
+      </div>
+      <div class="shot reveal">
+        <img src="assets/case-007/computer-object-verified.jpg" alt="Active Directory Users and Computers showing LAB-PC1 as a new computer object" loading="lazy">
+        <div class="shot-caption"><b>Verified</b> &mdash; LAB-PC1 now appears as a Computer object in Active Directory, confirming the join end-to-end.</div>
+      </div>
+    </div>
+
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gray);margin-top:14px;">Screenshots taken directly from the lab build; browser chrome and account details cropped for public disclosure.</p>
+  </div>
+</div>
+
+<!-- HOW I THINK -->
+<div class="wrap" style="padding:80px 0 0;">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-num">Method</span>
+      <h2 class="section-title">How I Thought<br>Through This One</h2>
+    </div>
+  </div>
+  <div class="reasoning-card reveal">
+    <div class="reasoning-grid">
+      <div>
+        <div class="r-label">Question I Asked</div>
+        <p class="r-text quote">"Why did the domain join actually fail, when the wizard just says it failed with no further detail?"</p>
+      </div>
+      <div>
+        <div class="r-label">Evidence</div>
+        <p class="r-text">The client NIC's DNS configuration, and the output of <code>ipconfig /all</code> showing which DNS server was actually in use.</p>
+      </div>
+      <div class="r-divider"></div>
+      <div>
+        <div class="r-label">What I Initially Thought</div>
+        <p class="r-text">A failed domain join could plausibly be a credentials issue, a network connectivity problem, or a firewall/NSG rule blocking the required ports &mdash; several different things could produce the same generic failure.</p>
+      </div>
+      <div>
+        <div class="r-label">What Changed My Mind</div>
+        <p class="r-text"><code>ipconfig /all</code> showed the client was still resolving names against Azure's platform DNS service rather than the domain controller, meaning it could never locate the SRV records AD needs &mdash; a DNS problem, not a credentials or connectivity one.</p>
+      </div>
+      <div class="r-divider"></div>
+      <div style="grid-column:1/-1;">
+        <div class="r-label">Conclusion</div>
+        <p class="r-text">DNS is almost always the root cause when a domain join fails. If a client can't resolve the domain controller by name, nothing else about Active Directory works &mdash; checking DNS configuration should be the first troubleshooting step, not the last.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLS -->
+<div class="wrap" style="padding:80px 0 40px;">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-num">Toolkit</span>
+      <h2 class="section-title">Tools Used<br>on This Build</h2>
+    </div>
+  </div>
+  <div class="tool-grid reveal"><span class="tool-pill">Azure Portal</span><span class="tool-pill">Azure Bastion</span><span class="tool-pill">Server Manager</span><span class="tool-pill">Active Directory Users and Computers</span><span class="tool-pill">Windows Server 2022</span><span class="tool-pill">ipconfig / DNS troubleshooting</span></div>
+</div>
+
+<div class="wrap">
+  <div class="case-nav-footer reveal">
+    <a class="case-nav-link prev" href="case-006.html">
+      <span class="dir">← Previous Case</span>
+      <span class="title">Case 006 — HIPAA Compliance Assessment</span>
+    </a>
+    <a class="case-nav-link next" href="case-001.html">
+      <span class="dir">Next Case →</span>
+      <span class="title">Case 001 — Endpoint Intrusion Investigation</span>
+    </a>
+  </div>
+  <a class="back-index" href="index.html#cases">← Back to all case files</a>
+</div>
+
+<!-- CONTACT / FOOTER -->
+<footer id="contact" class="wrap">
+  <div class="reveal">
+    <div class="feat-eyebrow" style="margin-bottom:18px;">Contact</div>
+    <div class="foot-cta">Open a<br><em>new case</em> with me.</div>
+  </div>
+  <div class="foot-grid reveal">
+    <div class="foot-col">
+      <div class="label">Reach Out</div>
+      <a href="mailto:hello@keannamckinney.com">hello@keannamckinney.com</a>
+      <a href="#">linkedin.com/in/keannamckinney</a>
+    </div>
+    <div class="foot-col">
+      <div class="label">Elsewhere</div>
+      <a href="#">GitHub</a>
+      <a href="#">Resume — PDF</a>
+    </div>
+    <div class="foot-col">
+      <div class="label">Based In</div>
+      <a href="#" style="pointer-events:none;">United States</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Ke'Anna McKinney</span>
+    <span>Case File Closed — Portfolio Open</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>

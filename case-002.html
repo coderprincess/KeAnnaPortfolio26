@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phishing Investigation — Meridian Logistics — Ke'Anna McKinney</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-mark"><span class="dot"></span>KM // DFIR</div>
+  <nav class="links">
+    <a href="index.html#cases">Case Files</a>
+    <a href="index.html#think">How I Think</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>
+  <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">Menu</button>
+</header>
+
+<div class="wrap">
+  <div class="breadcrumb reveal">
+    <a href="index.html">Portfolio</a><span class="sep">/</span><a href="index.html#cases">Case Files</a><span class="sep">/</span><span class="current">Case 002</span>
+  </div>
+
+  <div class="case-page-hero reveal">
+    <div class="feat-eyebrow">Case 002 · Closed</div>
+    <h1 class="feat-title">Phishing Investigation — Meridian Logistics</h1>
+    <div class="feat-meta">Email Security<br>Incident Response<br>SANS PICERL</div>
+    <div class="case-tags"><span>PICERL</span><span>Header Analysis</span><span>MITRE ATT&CK</span><span>IOC Triage</span></div>
+  </div>
+
+  <div class="case-body">
+    <div class="feat-cols reveal">
+      <div class="feat-block">
+        <h4>The Incident</h4>
+        <p>A Meridian Logistics employee forwarded a suspicious email to the security team. It claimed to be from the IT Helpdesk, warned of a mailbox storage limit, and asked the user to click a link and open an attached "storage report" to verify credentials.</p>
+        <h4>The Mission</h4>
+        <p>Determine whether the message was actually malicious, extract usable indicators of compromise, map the observed behavior to MITRE ATT&CK, and run the response through the SANS PICERL lifecycle rather than a one-off cleanup.</p>
+        <h4>Before I Started</h4>
+        <p>Is this really phishing, or a false alarm? Where did it actually originate? Did anyone click the link or open the attachment, and what would that have triggered?</p>
+      </div>
+      <div class="feat-block">
+        <h4>Finding — Investigator's Reasoning</h4>
+        <p>The email passed a casual glance — the display name and branding read as plausible internal IT correspondence. What gave it away wasn't the content, it was the header chain: the Reply-To and Return-Path pointed to a third domain entirely different from both the claimed sender and the recipient's own domain, and SPF, DKIM, and DMARC all failed together — a combination a legitimate IT notice wouldn't produce.</p>
+      </div>
+    </div>
+
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:12px;" class="reveal">Investigation Timeline</h4>
+    <div class="timeline reveal">
+      <div class="tl-row"><span class="tl-time">Step 1</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Preparation</b> — raw .eml opened in a plain text editor; link and attachment treated as inert artifacts, never executed.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 2</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Header analysis</b> — From, Reply-To, Return-Path, and Received-SPF fields compared against the claimed sending domain.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 3</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Authentication failure confirmed</b> — SPF fail, DKIM none, DMARC fail, all for the same message.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 4</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>URL &amp; attachment triage</b> — link refanged in CyberChef and checked via urlscan.io rather than visited directly; macro-enabled .xlsm flagged as a common payload delivery type.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 5</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>IOC extraction</b> — sender domain, reply-to/return-path domain, originating IP, malicious URL, and attachment hash logged.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 6</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>MITRE ATT&amp;CK mapping</b> — behavior mapped to spearphishing, user execution, and C2 techniques.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 7</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>PICERL response executed</b> — containment, eradication, and recovery actions documented and applied.</span></div>
+    </div>
+
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:36px;" class="reveal">Indicators of Compromise</h4>
+    <table class="ioc-table reveal">
+    <tr><th>Type</th><th>Indicator</th><th>Context</th></tr>
+    <tr><td>Sender Domain</td><td>meridianlogistics-helpdesk.com</td><td>Spoofed IT Helpdesk display name</td></tr>
+    <tr><td>Reply-To / Return-Path</td><td>mail-secure-check.net</td><td>Third, unrelated domain — redirect infrastructure</td></tr>
+    <tr><td>Originating IP</td><td>203.0.113.45</td><td>SPF-unauthorized sending IP</td></tr>
+    <tr><td>URL</td><td>meridian-portal-verify[.]net/session/auth</td><td>Credential-harvesting landing page</td></tr>
+    <tr><td>Attachment</td><td>Storage_Report.xlsm</td><td>Macro-enabled Excel payload delivery</td></tr>
+    </table>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gray);margin-top:14px;">Simulated lab exercise built around a fictional organization (Meridian Logistics); all indicators are lab-generated, not from a live incident.</p>
+    
+  </div>
+</div>
+
+<!-- HOW I THINK (per-case) -->
+<div class="wrap" style="padding:80px 0 0;">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-num">Method</span>
+      <h2 class="section-title">How I Thought<br>Through This One</h2>
+    </div>
+  </div>
+  <div class="reasoning-card reveal">
+    <div class="reasoning-grid">
+      <div>
+        <div class="r-label">Question I Asked</div>
+        <p class="r-text quote">"Is a failed SPF/DKIM/DMARC check on its own enough to call this malicious, or could it be a misconfigured but legitimate sender?"</p>
+      </div>
+      <div>
+        <div class="r-label">Evidence</div>
+        <p class="r-text">Full raw email headers (From, Reply-To, Return-Path, Received-SPF, Authentication-Results) and the declared attachment type.</p>
+      </div>
+      <div class="r-divider"></div>
+      <div>
+        <div class="r-label">What I Initially Thought</div>
+        <p class="r-text">A single authentication failure isn't unusual on its own — plenty of legitimate mail has SPF hiccups — so one weak signal wasn't enough on its own to call it malicious.</p>
+      </div>
+      <div>
+        <div class="r-label">What Changed My Mind</div>
+        <p class="r-text">The Reply-To and Return-Path both pointed to the same unrelated domain, different from the claimed sender and the recipient's own organization, and all three authentication checks failed together — that convergence, not any single header, is what confirmed intent.</p>
+      </div>
+      <div class="r-divider"></div>
+      <div style="grid-column:1/-1;">
+        <div class="r-label">Conclusion</div>
+        <p class="r-text">One weak signal proves little; several independent signals converging on the same infrastructure is what actually supports a verdict. That's the standard I now hold header analysis to.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLS USED -->
+<div class="wrap" style="padding:80px 0 40px;">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-num">Toolkit</span>
+      <h2 class="section-title">Tools Used<br>on This Case</h2>
+    </div>
+  </div>
+  <div class="tool-grid reveal"><span class="tool-pill">MXToolbox / Google Header Analyzer</span><span class="tool-pill">VirusTotal</span><span class="tool-pill">urlscan.io</span><span class="tool-pill">WHOIS</span><span class="tool-pill">CyberChef</span><span class="tool-pill">MITRE ATT&CK Navigator</span><span class="tool-pill">SANS PICERL / NIST SP 800-61</span></div>
+</div>
+
+<div class="wrap">
+  <div class="case-nav-footer reveal">
+    <a class="case-nav-link prev" href="case-001.html">
+      <span class="dir">← Previous Case</span>
+      <span class="title">Case 001 — Endpoint Intrusion Investigation</span>
+    </a>
+    <a class="case-nav-link next" href="case-003.html">
+      <span class="dir">Next Case →</span>
+      <span class="title">Case 003 — HiTeK Forensics Challenge</span>
+    </a>
+  </div>
+  <a class="back-index" href="index.html#cases">← Back to all case files</a>
+</div>
+
+<!-- CONTACT / FOOTER -->
+<footer id="contact" class="wrap">
+  <div class="reveal">
+    <div class="feat-eyebrow" style="margin-bottom:18px;">Contact</div>
+    <div class="foot-cta">Open a<br><em>new case</em> with me.</div>
+  </div>
+  <div class="foot-grid reveal">
+    <div class="foot-col">
+      <div class="label">Reach Out</div>
+      <a href="mailto:hello@keannamckinney.com">hello@keannamckinney.com</a>
+      <a href="#">linkedin.com/in/keannamckinney</a>
+    </div>
+    <div class="foot-col">
+      <div class="label">Elsewhere</div>
+      <a href="#">GitHub</a>
+      <a href="#">Resume — PDF</a>
+    </div>
+    <div class="foot-col">
+      <div class="label">Based In</div>
+      <a href="#" style="pointer-events:none;">United States</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Ke'Anna McKinney</span>
+    <span>Case File Closed — Portfolio Open</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>

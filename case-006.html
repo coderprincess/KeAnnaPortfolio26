@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HIPAA Compliance Assessment — Healthcare Security Simulation — Ke'Anna McKinney</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-mark"><span class="dot"></span>KM // DFIR</div>
+  <nav class="links">
+    <a href="index.html#cases">Case Files</a>
+    <a href="index.html#think">How I Think</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>
+  <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">Menu</button>
+</header>
+
+<div class="wrap">
+  <div class="breadcrumb reveal">
+    <a href="index.html">Portfolio</a><span class="sep">/</span><a href="index.html#cases">Case Files</a><span class="sep">/</span><span class="current">Case 006</span>
+  </div>
+
+  <div class="case-page-hero reveal">
+    <div class="feat-eyebrow">Case 006 · Closed</div>
+    <h1 class="feat-title">HIPAA Compliance Assessment — Healthcare Security Simulation</h1>
+    <div class="feat-meta">Healthcare Security<br>HIPAA Security Rule<br>Audit Logging</div>
+    <div class="case-tags"><span>HIPAA</span><span>Splunk</span><span>NIST/CIS Mapping</span><span>Audit Logging</span></div>
+  </div>
+
+  <div class="case-body">
+    <div class="feat-cols reveal">
+      <div class="feat-block">
+        <h4>The Incident</h4>
+        <p>A simulated outpatient clinic environment — a deliberately vulnerable target standing in for a legacy clinic system, a centralized Splunk instance for log monitoring, and a Kali assessment workstation — was reviewed against three control areas central to the HIPAA Security Rule: access control, data handling, and audit logging.</p>
+        <h4>The Mission</h4>
+        <p>Technically validate control gaps rather than just checklist them, confirm whether the audit-logging capability actually meets the HIPAA requirement rather than just looking configured, and produce a prioritized remediation roadmap tied to specific 45 CFR citations.</p>
+        <h4>Before I Started</h4>
+        <p>Does this environment actually meet HIPAA's technical safeguards, or does it just look configured? Is the audit-logging capability real, or just installed? Which gaps represent an active exploitable risk to ePHI versus a hardening opportunity?</p>
+      </div>
+      <div class="feat-block">
+        <h4>Finding — Investigator's Reasoning</h4>
+        <p>A working Splunk dashboard with events flowing in looked, at a glance, like the audit-control requirement (§164.312(b)) was already satisfied. Reviewing the actual event content — full command-line detail on privileged sudo escalations and correctly attributed failed-login attempts — confirmed the pipeline met the 'who, what, when' standard; what kept the control at Partial rather than fully Compliant was the absence of a defined log-review cadence and alerting rule set, a procedural gap rather than a technical one.</p>
+      </div>
+    </div>
+
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:12px;" class="reveal">Investigation Timeline</h4>
+    <div class="timeline reveal">
+      <div class="tl-row"><span class="tl-time">Stage 1</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Lab build</b> — target system, Splunk-SIEM, and Kali assessment workstation stood up in an isolated environment.</span></div>
+      <div class="tl-row"><span class="tl-time">Stage 2</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Logging pipeline validated</b> — syslog forwarding configured from the clinic system to Splunk; end-to-end delivery confirmed.</span></div>
+      <div class="tl-row"><span class="tl-time">Stage 3</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Technical vulnerability scanning</b> — nmap service/version and --script vuln scans run against the target system.</span></div>
+      <div class="tl-row"><span class="tl-time">Stage 4</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Configuration &amp; log review</b> — authentication logs, privileged (sudo) command history, and service configuration inspected directly.</span></div>
+      <div class="tl-row"><span class="tl-time">Stage 5</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Findings mapped to HIPAA</b> — each gap cited against 45 CFR §164.308 / §164.310 / §164.312.</span></div>
+      <div class="tl-row"><span class="tl-time">Stage 6</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Audit evidence captured</b> — 288 total events indexed in Splunk, including full sudo command-line escalation and multiple failed SSH login attempts.</span></div>
+      <div class="tl-row"><span class="tl-time">Stage 7</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Remediation roadmap delivered</b> — 12 findings sequenced into Immediate / Short-Term / Medium-Term priority tiers.</span></div>
+    </div>
+
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:36px;" class="reveal">Key Findings</h4>
+    <table class="ioc-table reveal">
+    <tr><th>Type</th><th>Indicator</th><th>Context</th></tr>
+    <tr><td>F-01</td><td>vsftpd 2.3.4 backdoor — confirmed root shell</td><td>Critical — §164.312(a)(2)(iv) — CVE-2011-2523</td></tr>
+    <tr><td>F-02</td><td>UnrealIRCd trojaned backdoor service</td><td>Critical — §164.312(a)(1) — port 6667</td></tr>
+    <tr><td>F-04</td><td>Open, unauthenticated root shell (ingreslock)</td><td>Critical — §164.312(a)(1) — port 1524</td></tr>
+    <tr><td>Audit Control</td><td>Splunk syslog pipeline — 288 events indexed</td><td>Partial — §164.312(b) — sudo/auth activity captured, no review cadence defined</td></tr>
+    </table>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gray);margin-top:14px;">Simulated assessment against a deliberately vulnerable lab target — not a review of a real clinic's production systems.</p>
+    
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:36px;" class="reveal">Case Evidence</h4>
+    <div class="shot reveal">
+      <img src="assets/case-006/lab-environment-overview.jpg" alt="VirtualBox Manager showing the Kali, Metasploitable-Target, and Splunk-SIEM lab VMs" loading="lazy">
+      <div class="shot-caption"><b>Lab environment</b> &mdash; the three-VM simulation: Kali (assessment workstation), Metasploitable-Target (simulated clinic system), and Splunk-SIEM (centralized log monitoring).</div>
+    </div>
+    <div class="shot-row">
+    <div class="shot reveal">
+      <img src="assets/case-006/syslog-pipeline-validation.jpg" alt="Splunk search showing the first successful syslog events received from the target system" loading="lazy">
+      <div class="shot-caption"><b>Pipeline validated</b> &mdash; the first syslog events landing in Splunk, confirming end-to-end log delivery from the clinic system.</div>
+    </div>
+    <div class="shot reveal">
+      <img src="assets/case-006/sudo-escalation-capture.jpg" alt="Splunk search showing a captured sudo escalation event with full command-line detail" loading="lazy">
+      <div class="shot-caption"><b>Privileged access captured</b> &mdash; a full sudo escalation event, showing exactly which user, command, and working directory &mdash; direct evidence for the §164.312(b) audit-control requirement.</div>
+    </div>
+    </div>
+    <div class="shot reveal">
+      <img src="assets/case-006/final-event-count-288.jpg" alt="Splunk search showing 288 total indexed events over the assessment window" loading="lazy">
+      <div class="shot-caption"><b>288 events indexed</b> &mdash; the final dataset size by the end of the assessment window, the substantive evidence base the audit-logging finding was based on.</div>
+    </div>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gray);margin-top:14px;">Simulated clinic environment; screenshots cropped to remove unrelated browser tabs from the assessment workstation.</p>
+
+  </div>
+</div>
+
+<!-- HOW I THINK (per-case) -->
+<div class="wrap" style="padding:80px 0 0;">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-num">Method</span>
+      <h2 class="section-title">How I Thought<br>Through This One</h2>
+    </div>
+  </div>
+  <div class="reasoning-card reveal">
+    <div class="reasoning-grid">
+      <div>
+        <div class="r-label">Question I Asked</div>
+        <p class="r-text quote">"Is the audit-logging control here actually compliant, or does it just look like it's working?"</p>
+      </div>
+      <div>
+        <div class="r-label">Evidence</div>
+        <p class="r-text">Syslog forwarding pipeline configuration, direct log-delivery testing, and the actual content of captured events (sudo escalations, failed logins) reviewed inside Splunk.</p>
+      </div>
+      <div class="r-divider"></div>
+      <div>
+        <div class="r-label">What I Initially Thought</div>
+        <p class="r-text">A working dashboard with events visibly flowing in looked, at first glance, like the audit-control requirement was already satisfied.</p>
+      </div>
+      <div>
+        <div class="r-label">What Changed My Mind</div>
+        <p class="r-text">Reviewing the actual event content — full command-line detail on privileged escalations and correctly attributed failed-login attempts — confirmed the pipeline met the specific 'who, what, when' requirement, while the missing review cadence and alerting rules is what kept the control at Partial rather than Compliant.</p>
+      </div>
+      <div class="r-divider"></div>
+      <div style="grid-column:1/-1;">
+        <div class="r-label">Conclusion</div>
+        <p class="r-text">A functioning pipeline and a compliant control aren't the same thing. Content and process both have to be verified — not just whether data is flowing.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLS USED -->
+<div class="wrap" style="padding:80px 0 40px;">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-num">Toolkit</span>
+      <h2 class="section-title">Tools Used<br>on This Case</h2>
+    </div>
+  </div>
+  <div class="tool-grid reveal"><span class="tool-pill">Metasploitable2</span><span class="tool-pill">Splunk (SIEM)</span><span class="tool-pill">Kali Linux</span><span class="tool-pill">Nmap (NSE vuln scripts)</span><span class="tool-pill">VirtualBox</span><span class="tool-pill">45 CFR §164.308–312</span></div>
+</div>
+
+<div class="wrap">
+  <div class="case-nav-footer reveal">
+    <a class="case-nav-link prev" href="case-005.html">
+      <span class="dir">← Previous Case</span>
+      <span class="title">Case 005 — Cybersecurity Risk Assessment</span>
+    </a>
+    <a class="case-nav-link next" href="case-007.html">
+      <span class="dir">Next Case →</span>
+      <span class="title">Case 007 — Active Directory Lab — Azure</span>
+    </a>
+  </div>
+  <a class="back-index" href="index.html#cases">← Back to all case files</a>
+</div>
+
+<!-- CONTACT / FOOTER -->
+<footer id="contact" class="wrap">
+  <div class="reveal">
+    <div class="feat-eyebrow" style="margin-bottom:18px;">Contact</div>
+    <div class="foot-cta">Open a<br><em>new case</em> with me.</div>
+  </div>
+  <div class="foot-grid reveal">
+    <div class="foot-col">
+      <div class="label">Reach Out</div>
+      <a href="mailto:hello@keannamckinney.com">hello@keannamckinney.com</a>
+      <a href="#">linkedin.com/in/keannamckinney</a>
+    </div>
+    <div class="foot-col">
+      <div class="label">Elsewhere</div>
+      <a href="#">GitHub</a>
+      <a href="#">Resume — PDF</a>
+    </div>
+    <div class="foot-col">
+      <div class="label">Based In</div>
+      <a href="#" style="pointer-events:none;">United States</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Ke'Anna McKinney</span>
+    <span>Case File Closed — Portfolio Open</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
