@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Public Records Response to a Cybersecurity Incident — Ke'Anna McKinney</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-mark"><span class="dot"></span>KM // DFIR</div>
+  <nav class="links">
+    <a href="index.html#cases">Case Files</a>
+    <a href="index.html#think">How I Think</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>
+  <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">Menu</button>
+</header>
+
+<div class="wrap">
+  <div class="breadcrumb reveal">
+    <a href="index.html">Portfolio</a><span class="sep">/</span><a href="index.html#cases">Case Files</a><span class="sep">/</span><span class="current">Case 008</span>
+  </div>
+
+  <div class="case-page-hero reveal">
+    <div class="feat-eyebrow">Case 008 · Closed</div>
+    <h1 class="feat-title">Public Records Response to a Cybersecurity Incident</h1>
+    <div class="feat-meta">Legal & Compliance<br>Texas Public Information Act<br>eDiscovery</div>
+    <div class="case-tags"><span>TPIA / Ch. 552</span><span>eDiscovery</span><span>Redaction</span><span>Chain of Custody</span></div>
+  </div>
+
+  <div class="case-body">
+    <div class="feat-cols reveal">
+      <div class="feat-block">
+        <h4>The Incident</h4>
+        <p>A ransomware incident affected a municipal court records system. A week later, a local reporter filed a formal Texas Public Information Act (TPIA) request for every email, text message, and memo the IT Director and City Manager exchanged about the incident, including all communications with the incident-response vendor and law enforcement.</p>
+        <h4>The Mission</h4>
+        <p>Log and route the request, identify the right custodians, coordinate exemption review with the City Attorney's Office, prepare the formal escalation to the Texas Attorney General for any disputed withholdings, and respond to the requester, all inside the statutory deadline.</p>
+        <h4>Before I Started</h4>
+        <p>What actually has to be searched, and by whom? Which of these records are genuinely exempt under Chapter 552 versus just uncomfortable to release? And what happens procedurally when the City and the requester disagree about that?</p>
+      </div>
+      <div class="feat-block">
+        <h4>Finding: Investigator's Reasoning</h4>
+        <p>The instinct on a record like privileged legal correspondence is to withhold it outright because it feels sensitive. The statute doesn't work that way. Each of the 31 responsive records had to be tested against a specific exemption (attorney-client privilege, active law enforcement investigation, vendor trade secret, and so on), not a general sense of discomfort. That distinction is what separates a defensible disposition log from one that collapses under an Attorney General review.</p>
+      </div>
+    </div>
+
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:12px;" class="reveal">Investigation Timeline</h4>
+    <div class="timeline reveal">
+      <div class="tl-row"><span class="tl-time">Step 1</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Intake</b>: request logged as a case file; the Gov't Code §552.301 clock starts on the date of <i>receipt</i>, not assignment.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 2</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Custodian identification</b>: four custodians identified: the IT Director, the City Manager, the City Attorney's Office, and the IT Service Desk ticketing system.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 3</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Search &amp; collection</b>: Microsoft 365 / Purview eDiscovery content search across mailboxes, an MDM export for text messages, and ticketing system records; every export SHA-256 hashed at collection.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 4</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Exemption review</b>: 31 responsive records reviewed individually and logged with a disposition: Released, Redacted, or Withheld, each tied to a specific statutory exemption.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 5</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Redaction</b>: sample record produced showing privileged legal advice and a personal phone number redacted, each citation logged inline.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 6</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Escalation to the Attorney General</b>: nine disputed records submitted to the Texas AG's Open Records Division for a ruling under §552.301, with the requester notified simultaneously as the statute requires.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 7</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Response to requester</b>: final letter itemizing exactly what was released, what was redacted and why, what remains pending a ruling, and the requester's appeal rights.</span></div>
+    </div>
+
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:36px;" class="reveal">Exemptions Applied</h4>
+    <table class="ioc-table reveal">
+    <tr><th>Type</th><th>Indicator</th><th>Context</th></tr>
+    <tr><td>§552.103</td><td>Reasonably anticipated litigation</td><td>Applied to records tied to potential City liability</td></tr>
+    <tr><td>§552.107</td><td>Attorney-client privileged communication</td><td>Applied to legal advice from the City Attorney's Office</td></tr>
+    <tr><td>§552.108</td><td>Active law enforcement investigation</td><td>Applied to records shared with the FBI</td></tr>
+    <tr><td>§552.110</td><td>Vendor trade secret / commercial information</td><td>Applied to the IR vendor's proprietary methodology</td></tr>
+    <tr><td>§552.117</td><td>Employee personal contact information</td><td>Applied to personal phone numbers in released records</td></tr>
+    </table>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gray);margin-top:14px;">Hypothetical scenario: the City of Kirbywood, all named individuals, and every record described are a fictional mockup built to model a realistic municipal compliance workflow. The legal framework (Texas Gov't Code Ch. 552) and process are real and verified against the current statute.</p>
+    
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:36px;" class="reveal">Case Evidence</h4>
+    <div class="shot reveal">
+      <img src="assets/case-008/redacted-sample-record.jpg" alt="Redacted sample record showing applied redactions with statutory citations" loading="lazy">
+      <div class="shot-caption"><b>Applied redaction standard</b>: a sample record with privileged legal advice and a personal phone number redacted, each redaction cited inline to the specific exemption (§552.107, §552.117) that justifies it.</div>
+    </div>
+    <div class="shot reveal">
+      <img src="assets/case-008/responsive-records-log.jpg" alt="Responsive Records Log showing 31 tracked records with color-coded disposition" loading="lazy">
+      <div class="shot-caption"><b>Responsive records log</b>: all 31 records tracked to a disposition (Released / Redacted / Withheld), each tied to a specific statutory exemption rather than a general judgment call.</div>
+    </div>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gray);margin-top:14px;">Mockup documents built for this simulated scenario; no real individuals or agency records are depicted.</p>
+
+    
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:36px;" class="reveal">Artifacts Produced</h4>
+    <table class="artifact-table reveal">
+      <tr><th>#</th><th>Artifact</th><th>What It Shows</th><th></th></tr>
+      <tr><td>01</td><td class="key">Incoming TPIA Request</td><td>The trigger document: a realistic, formal TPIA request</td><td><a class="dl" href="assets/case-008/documents/incoming-request-letter.docx" target="_blank" rel="noopener">.docx</a></td></tr>
+      <tr><td>02</td><td class="key">Intake &amp; Routing Memo</td><td>Statutory deadline tracking, custodian identification</td><td><a class="dl" href="assets/case-008/documents/intake-routing-memo.docx" target="_blank" rel="noopener">.docx</a></td></tr>
+      <tr><td>03</td><td class="key">Search &amp; Collection Methodology Memo</td><td>Defensible, documented collection process</td><td><a class="dl" href="assets/case-008/documents/search-collection-methodology-memo.docx" target="_blank" rel="noopener">.docx</a></td></tr>
+      <tr><td>04</td><td class="key">Responsive Records Log</td><td>31-record disposition tracker with exemption codes</td><td><a class="dl" href="assets/case-008/documents/responsive-records-log.xlsx" target="_blank" rel="noopener">.xlsx</a></td></tr>
+      <tr><td>05</td><td class="key">Redacted Sample Record</td><td>Applied redaction standard with legal citations</td><td><a class="dl" href="assets/case-008/documents/redacted-sample-record.docx" target="_blank" rel="noopener">.docx</a></td></tr>
+      <tr><td>06</td><td class="key">OAG Ruling Request Letter</td><td>Formal escalation when withholding is disputed</td><td><a class="dl" href="assets/case-008/documents/ag-ruling-request-letter.docx" target="_blank" rel="noopener">.docx</a></td></tr>
+      <tr><td>07</td><td class="key">Final Response Letter</td><td>Closing communication and appeal-rights notice</td><td><a class="dl" href="assets/case-008/documents/final-response-letter.docx" target="_blank" rel="noopener">.docx</a></td></tr>
+    </table>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gray);margin-top:14px;">All seven artifacts are downloadable above (Word / Excel). This case simulates a Staff Analyst (Data Privacy &amp; Compliance) / Public Information Officer / eDiscovery Analyst role, the compliance-facing side of incident response that complements the technical DFIR cases elsewhere in this portfolio.</p>
+
+  </div>
+</div>
+
+<!-- HOW I THINK (per-case) -->
+<div class="wrap" style="padding:80px 0 0;">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-num">Method</span>
+      <h2 class="section-title">How I Thought<br>Through This One</h2>
+    </div>
+  </div>
+  <div class="reasoning-card reveal">
+    <div class="reasoning-grid">
+      <div>
+        <div class="r-label">Question I Asked</div>
+        <p class="r-text quote">"Is this record actually privileged, or just something the City would rather not release?"</p>
+      </div>
+      <div>
+        <div class="r-label">Evidence</div>
+        <p class="r-text">The content of each record measured against the specific statutory exemption language, not a general impression of sensitivity, cross-checked against who authored it, who it was sent to, and what it was created for.</p>
+      </div>
+      <div class="r-divider"></div>
+      <div>
+        <div class="r-label">What I Initially Thought</div>
+        <p class="r-text">The reflex on anything that touched legal strategy or the ongoing FBI involvement was to default to withholding broadly, since releasing the wrong thing carries real liability.</p>
+      </div>
+      <div>
+        <div class="r-label">What Changed My Mind</div>
+        <p class="r-text">Applying the actual exemption tests one record at a time showed that several records read as sensitive on their face but didn't meet any specific statutory exemption, so those had to be released. Over-withholding is its own liability under the Act, not a safe default.</p>
+      </div>
+      <div class="r-divider"></div>
+      <div style="grid-column:1/-1;">
+        <div class="r-label">Conclusion</div>
+        <p class="r-text">A defensible disposition log is built exemption-by-exemption and record-by-record, not by a blanket judgment call about what feels releasable. That discipline is what holds up if the Attorney General's office reviews the file.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLS USED -->
+<div class="wrap" style="padding:80px 0 40px;">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-num">Toolkit</span>
+      <h2 class="section-title">Tools Used<br>on This Case</h2>
+    </div>
+  </div>
+  <div class="tool-grid reveal"><span class="tool-pill">Texas Gov't Code Ch. 552 (TPIA)</span><span class="tool-pill">Microsoft Purview eDiscovery</span><span class="tool-pill">SHA-256 chain of custody</span><span class="tool-pill">Records disposition log (Excel)</span></div>
+</div>
+
+<div class="wrap">
+  <div class="case-nav-footer reveal">
+    <a class="case-nav-link prev" href="case-007.html">
+      <span class="dir">← Previous Case</span>
+      <span class="title">Case 007 — Active Directory Lab — Azure</span>
+    </a>
+    <a class="case-nav-link next" href="case-001.html">
+      <span class="dir">Next Case →</span>
+      <span class="title">Case 001 — Endpoint Intrusion Investigation</span>
+    </a>
+  </div>
+  <a class="back-index" href="index.html#cases">← Back to all case files</a>
+</div>
+
+<!-- CONTACT / FOOTER -->
+<footer id="contact" class="wrap">
+  <div class="reveal">
+    <div class="feat-eyebrow" style="margin-bottom:18px;">Contact</div>
+    <div class="foot-cta">Open a<br><em>new case</em> with me.</div>
+  </div>
+  <div class="foot-grid reveal">
+    <div class="foot-col">
+      <div class="label">Reach Out</div>
+      <a href="mailto:keannamckinney26@gmail.com">keannamckinney26@gmail.com</a>
+      <a href="https://www.linkedin.com/in/ke-anna-mckinney-66580b342" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="foot-col">
+      <div class="label">Elsewhere</div>
+      <a href="#">GitHub</a>
+      <a href="assets/resume/keanna-mckinney-resume.pdf" target="_blank" rel="noopener">Resume — PDF</a>
+    </div>
+    <div class="foot-col">
+      <div class="label">Based In</div>
+      <a href="#" style="pointer-events:none;">United States</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Ke'Anna McKinney</span>
+    <span>Case File Closed — Portfolio Open</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
