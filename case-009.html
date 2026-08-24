@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Litigation Hold and eDiscovery Collection — Ke'Anna McKinney</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-mark"><span class="dot"></span>KM // DFIR</div>
+  <nav class="links">
+    <a href="index.html#cases">Case Files</a>
+    <a href="index.html#think">How I Think</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>
+  <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">Menu</button>
+</header>
+
+<div class="wrap">
+  <div class="breadcrumb reveal">
+    <a href="index.html">Portfolio</a><span class="sep">/</span><a href="index.html#cases">Case Files</a><span class="sep">/</span><span class="current">Case 009</span>
+  </div>
+
+  <div class="case-page-hero reveal">
+    <div class="feat-eyebrow">Case 009 · Closed</div>
+    <h1 class="feat-title">Litigation Hold and eDiscovery Collection</h1>
+    <div class="feat-meta">Legal & Compliance<br>Litigation Hold<br>eDiscovery</div>
+    <div class="case-tags"><span>Litigation Hold</span><span>eDiscovery</span><span>Chain of Custody</span><span>Texas Tort Claims Act</span></div>
+  </div>
+
+  <div class="case-body">
+    <div class="feat-cols reveal">
+      <div class="feat-block">
+        <h4>The Incident</h4>
+        <p>This case picks up directly after <a href="case-008.html" style="color:var(--pink);">Case 008</a>, where the City of Kirbywood responded to a public records request about the same ransomware incident. A bakery owner whose civil case was pending in Municipal Court at the time of the breach notices suspicious activity on her business bank account. Her attorney sends the City a formal notice of claim under the Texas Tort Claims Act, alleging negligent handling of the breach exposed her personal and financial information, and explicitly demanding preservation of every record related to the incident.</p>
+        <h4>The Mission</h4>
+        <p>Determine when the duty to preserve was actually triggered, draft and distribute a litigation hold notice to every relevant custodian, track acknowledgment so there's no gap between sending a notice and confirming it landed, run a targeted eDiscovery collection scoped specifically to this claim, and maintain a defensible chain of custody for everything collected.</p>
+        <h4>Before I Started</h4>
+        <p>Has the duty to preserve actually been triggered yet, or is this still just a threat of a possible future claim? Who actually needs to receive this hold, and how do we know they got it and understood it? What has to be collected here that the original public-records search never touched?</p>
+      </div>
+      <div class="feat-block">
+        <h4>Finding: Investigator's Reasoning</h4>
+        <p>The instinct was to treat the City's strong immunity defense as a reason preservation might not be strictly necessary yet. The controlling Texas standard doesn't ask whether the City will ultimately prevail on the merits, it asks whether the City reasonably should know a claim is coming and that the evidence will be material to it. An attorney-signed notice of claim settles that question regardless of how strong the underlying defense is.</p>
+      </div>
+    </div>
+
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:12px;" class="reveal">Investigation Timeline</h4>
+    <div class="timeline reveal">
+      <div class="tl-row"><span class="tl-time">Step 1</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Trigger</b>: notice of claim arrives from the claimant's attorney, citing Tex. Civ. Prac. &amp; Rem. Code §101.101 and demanding preservation.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 2</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Legal analysis</b>: the City Attorney's Office applies the controlling Texas standard from <i>Brookshire Bros., Ltd. v. Aldridge</i>; the duty triggers independent of whether the City has a viable immunity defense on the merits.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 3</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Hold notice</b>: written notice issued to every custodian (IT Director, City Manager, Municipal Court Clerk's Office, City Attorney's Office, IT Service Desk), specifying what to preserve, what to stop doing, and who to contact.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 4</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Acknowledgment tracking</b>: every custodian's receipt and confirmation logged; a hold that was sent but never confirmed is a weak point if challenged later.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 5</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Targeted collection</b>: a new eDiscovery collection scoped specifically to this claim, going beyond the earlier public-records search: the full court case record, database modification history, and system access logs.</span></div>
+      <div class="tl-row"><span class="tl-time">Step 6</span><div class="tl-line"><span class="tl-dot"></span></div><span class="tl-text"><b>Chain of custody</b>: every file hashed with SHA-256 at the moment of collection, before it moves anywhere else, so its integrity can be proven later.</span></div>
+    </div>
+
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:36px;" class="reveal">Controlling Legal Authority</h4>
+    <table class="ioc-table reveal">
+    <tr><th>Type</th><th>Indicator</th><th>Context</th></tr>
+    <tr><td>Statute</td><td>Tex. Civ. Prac. &amp; Rem. Code §101.101</td><td>Notice-of-claim requirement under the Texas Tort Claims Act</td></tr>
+    <tr><td>Case Law</td><td>Brookshire Bros., Ltd. v. Aldridge, 438 S.W.3d 9, 20 (Tex. 2014)</td><td>Controlling standard for when the duty to preserve arises</td></tr>
+    <tr><td>Case Law</td><td>Wal-Mart Stores, Inc. v. Johnson, 106 S.W.3d 718, 722 (Tex. 2003)</td><td>Underlying authority cited in Brookshire Bros.</td></tr>
+    </table>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gray);margin-top:14px;">Hypothetical scenario: the City of Kirbywood, Priya Nandakumar, Nandakumar Family Bakery LLC, and the law firm Reyes &amp; Whitlock, PLLC are entirely fictional, created to model a realistic municipal litigation hold workflow. The legal standards applied are real and were verified against current Texas case law and statute.</p>
+    
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:36px;" class="reveal">Case Evidence</h4>
+    <div class="shot reveal">
+      <img src="assets/case-009/litigation-hold-notice.jpg" alt="Litigation hold notice sent to custodians naming what must be preserved" loading="lazy">
+      <div class="shot-caption"><b>Litigation hold notice</b>: the written instruction sent to every custodian, naming exactly what to preserve and what to stop doing (auto-delete, overwrite, routine disposal).</div>
+    </div>
+    <div class="shot reveal">
+      <img src="assets/case-009/chain-of-custody-hash-log.jpg" alt="Chain of custody hash log showing real computed SHA-256 values" loading="lazy">
+      <div class="shot-caption"><b>Chain of custody hash log</b>: real, computed SHA-256 values for every collected file, generated from actual mock evidence files built for this exercise rather than invented for the page.</div>
+    </div>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gray);margin-top:14px;">Mockup documents built for this simulated scenario; no real individuals, business, or law firm are depicted.</p>
+
+    
+    <h4 style="font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.12em;text-transform:uppercase;margin-top:36px;" class="reveal">Artifacts Produced</h4>
+    <table class="artifact-table reveal">
+      <tr><th>#</th><th>Artifact</th><th>What It Shows</th><th></th></tr>
+      <tr><td>01</td><td class="key">Notice of Claim</td><td>The trigger document: a realistic attorney demand letter</td><td><a class="dl" href="assets/case-009/documents/notice-of-claim.docx" target="_blank" rel="noopener">.docx</a></td></tr>
+      <tr><td>02</td><td class="key">Litigation Hold Trigger Memo</td><td>Legal analysis applying the correct Texas standard</td><td><a class="dl" href="assets/case-009/documents/litigation-hold-trigger-memo.docx" target="_blank" rel="noopener">.docx</a></td></tr>
+      <tr><td>03</td><td class="key">Litigation Hold Notice</td><td>The instruction sent to every custodian</td><td><a class="dl" href="assets/case-009/documents/litigation-hold-notice.docx" target="_blank" rel="noopener">.docx</a></td></tr>
+      <tr><td>04</td><td class="key">Custodian Acknowledgment Log</td><td>Tracking who received and confirmed the hold</td><td><a class="dl" href="assets/case-009/documents/custodian-acknowledgment-log.xlsx" target="_blank" rel="noopener">.xlsx</a></td></tr>
+      <tr><td>05</td><td class="key">eDiscovery Collection Plan</td><td>Scoped, methodical collection beyond the original search</td><td><a class="dl" href="assets/case-009/documents/ediscovery-collection-plan.docx" target="_blank" rel="noopener">.docx</a></td></tr>
+      <tr><td>06</td><td class="key">Chain of Custody Hash Log</td><td>Real, computed SHA-256 values for every collected file</td><td><a class="dl" href="assets/case-009/documents/chain-of-custody-hash-log.xlsx" target="_blank" rel="noopener">.xlsx</a></td></tr>
+    </table>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gray);margin-top:14px;">All six artifacts are downloadable above (Word / Excel). This case simulates a Legal Hold Coordinator / eDiscovery Analyst / Litigation Support Specialist role, working under the City Attorney's Office.</p>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--gray);margin-top:10px;">This case follows directly from <a href="case-008.html" style="color:var(--pink);">Case 008</a>, which covers the public records side of the same incident.</p>
+
+  </div>
+</div>
+
+<!-- HOW I THINK (per-case) -->
+<div class="wrap" style="padding:80px 0 0;">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-num">Method</span>
+      <h2 class="section-title">How I Thought<br>Through This One</h2>
+    </div>
+  </div>
+  <div class="reasoning-card reveal">
+    <div class="reasoning-grid">
+      <div>
+        <div class="r-label">Question I Asked</div>
+        <p class="r-text quote">"Has the duty to preserve actually been triggered yet, or is this still just a threat of a possible future claim?"</p>
+      </div>
+      <div>
+        <div class="r-label">Evidence</div>
+        <p class="r-text">The attorney-signed notice of claim itself, measured against the Texas standard for when a duty to preserve arises, not against whether the City is confident it will win on the merits.</p>
+      </div>
+      <div class="r-divider"></div>
+      <div>
+        <div class="r-label">What I Initially Thought</div>
+        <p class="r-text">The instinct was to treat the City's strong immunity defense as a reason preservation might not be strictly necessary yet.</p>
+      </div>
+      <div>
+        <div class="r-label">What Changed My Mind</div>
+        <p class="r-text">The Brookshire Bros. standard doesn't ask whether the City will ultimately prevail, it asks whether the City reasonably should know a claim is coming and that the evidence will matter. An attorney-signed demand letter settles that question regardless of the merits.</p>
+      </div>
+      <div class="r-divider"></div>
+      <div style="grid-column:1/-1;">
+        <div class="r-label">Conclusion</div>
+        <p class="r-text">Duty to preserve and likelihood of losing are two different questions. Treating them as the same one is exactly the kind of mistake that turns a winnable case into a spoliation problem.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLS USED -->
+<div class="wrap" style="padding:80px 0 40px;">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-num">Toolkit</span>
+      <h2 class="section-title">Tools Used<br>on This Case</h2>
+    </div>
+  </div>
+  <div class="tool-grid reveal"><span class="tool-pill">Texas Tort Claims Act (Ch. 101)</span><span class="tool-pill">Brookshire Bros. v. Aldridge standard</span><span class="tool-pill">Microsoft Purview eDiscovery</span><span class="tool-pill">SHA-256 chain of custody</span></div>
+</div>
+
+<div class="wrap">
+  <div class="case-nav-footer reveal">
+    <a class="case-nav-link prev" href="case-008.html">
+      <span class="dir">← Previous Case</span>
+      <span class="title">Case 008 — Public Records Response to a Cybersecurity Incident</span>
+    </a>
+    <a class="case-nav-link next" href="case-001.html">
+      <span class="dir">Next Case →</span>
+      <span class="title">Case 001 — Endpoint Intrusion Investigation</span>
+    </a>
+  </div>
+  <a class="back-index" href="index.html#cases">← Back to all case files</a>
+</div>
+
+<!-- CONTACT / FOOTER -->
+<footer id="contact" class="wrap">
+  <div class="reveal">
+    <div class="feat-eyebrow" style="margin-bottom:18px;">Contact</div>
+    <div class="foot-cta">Open a<br><em>new case</em> with me.</div>
+  </div>
+  <div class="foot-grid reveal">
+    <div class="foot-col">
+      <div class="label">Reach Out</div>
+      <a href="mailto:keannamckinney26@gmail.com">keannamckinney26@gmail.com</a>
+      <a href="https://www.linkedin.com/in/ke-anna-mckinney-66580b342" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="foot-col">
+      <div class="label">Elsewhere</div>
+      <a href="#">GitHub</a>
+      <a href="assets/resume/keanna-mckinney-resume.pdf" target="_blank" rel="noopener">Resume — PDF</a>
+    </div>
+    <div class="foot-col">
+      <div class="label">Based In</div>
+      <a href="#" style="pointer-events:none;">United States</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Ke'Anna McKinney</span>
+    <span>Case File Closed — Portfolio Open</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
